@@ -46,13 +46,15 @@
 // 4. The Cookies.set method is called to update a cookie that stores the updated cart information. The JSON.stringify method is used to convert the updated cart object to a JSON string before storing it in the cookie.
 // 5. The updated cartItems array is used to create a new cart object that is merged with the existing state.cart object using the spread operator (...). This new cart object is then merged with the existing state object using the spread operator, and the entire state object is returned. 
 
+import Cookies from 'js-cookie';
 import { createContext, useReducer } from 'react';
 
 export const Store = createContext();
 // the cart object is the initialState, the cart object has empty cartItems array.
 const initialState = {
-  cart: {cartItems: []},
-
+  cart: Cookies.get('cart')
+  ? JSON.parse(Cookies.get('cart'))
+  : {cartItems: [], shippingAddress: {}},
 };
 
 function reducer (state, action) {
