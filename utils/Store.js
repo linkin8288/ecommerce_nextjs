@@ -75,44 +75,44 @@ function reducer (state, action) {
       // This creates a new state object with the original state properties and a new cart property that has the updated cartItems array.
       return { ...state, cart: { ...state.cart, cartItems } };
     }
-    // case 'CART_REMOVE_ITEM': {
-    //   const cartItems = state.cart.cartItems.filter(
-    //     (item) => item.slug !== action.payload.slug
-    //   );
-    //   Cookies.set('cart', JSON.stringify({ ...state.cart, cartItems }));
-    //   return { ...state, cart: { ...state.cart, cartItems } };
-    // }
-    // case 'CART_RESET':
-    //   return {
-    //     ...state,
-    //     cart: {
-    //       cartItems: [],
-    //       shippingAddress: { location: {} },
-    //       paymentMethod: '',
-    //     },
-    //   };
-    // case 'CART_CLEAR_ITEMS':
-    //   return { ...state, cart: { ...state.cart, cartItems: [] } };
+    case 'CART_REMOVE_ITEM': {
+      const cartItems = state.cart.cartItems.filter(
+        (item) => item.slug !== action.payload.slug
+      );
+      // Cookies.set('cart', JSON.stringify({ ...state.cart, cartItems }));
+      return { ...state, cart: { ...state.cart, cartItems } };
+    }
+    case 'CART_RESET':
+      return {
+        ...state,
+        cart: {
+          cartItems: [],
+          shippingAddress: { location: {} },
+          paymentMethod: '',
+        },
+      };
+    case 'CART_CLEAR_ITEMS':
+      return { ...state, cart: { ...state.cart, cartItems: [] } };
 
-    // case 'SAVE_SHIPPING_ADDRESS':
-    //   return {
-    //     ...state,
-    //     cart: {
-    //       ...state.cart,
-    //       shippingAddress: {
-    //         ...state.cart.shippingAddress,
-    //         ...action.payload,
-    //       },
-    //     },
-    //   };
-    // case 'SAVE_PAYMENT_METHOD':
-    //   return {
-    //     ...state,
-    //     cart: {
-    //       ...state.cart,
-    //       paymentMethod: action.payload,
-    //     },
-    //   };
+    case 'SAVE_SHIPPING_ADDRESS':
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          shippingAddress: {
+            ...state.cart.shippingAddress,
+            ...action.payload,
+          },
+        },
+      };
+    case 'SAVE_PAYMENT_METHOD':
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          paymentMethod: action.payload,
+        },
+      };
 
 
     // In a Redux reducer, a default case is a fallback case that is executed when the action type dispatched to the reducer doesn't match any of the cases defined in the switch statement.

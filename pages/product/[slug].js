@@ -3,10 +3,11 @@
 // parameters. It will be an empty object during prerendering if the page 
 // doesn't use Server-side Rendering. Defaults to {}
 
-import { useRouter } from 'next/router'
+
 import Link from 'next/link';
 import Image from 'next/image';
 import Layout from '@/components/Layout'
+import { useRouter } from 'next/router';
 import React, { useContext } from 'react'
 import { Store } from '@/utils/Store';
 import data from '@/utils/data';
@@ -23,6 +24,9 @@ export default function ProductScreen() {
   console.log(product)
 
   const { state, dispatch } = useContext(Store);
+  if (!product) {
+    return <Layout title="Produt Not Found">Produt Not Found</Layout>;
+  }
 
   const addToCartHandler = () => {
 
