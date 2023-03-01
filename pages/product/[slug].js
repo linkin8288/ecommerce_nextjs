@@ -11,34 +11,59 @@ import { useRouter } from 'next/router';
 import React, { useContext } from 'react'
 import { Store } from '@/utils/Store';
 import data from '@/utils/data';
+import Product from '../../models/Product';
+import axios from 'axios';
+import db from '../../utils/db';
+import { toast } from 'react-toastify';
 
-export default function ProductScreen() {
-  const { query } = useRouter();
-  const { slug } = query;
+export default function ProductScreen(props) {
+  // const { query } = useRouter();
+  // const { slug } = query;
 
-  const product = data.products.find((x) => x.slug === slug);
-  if (!product) {
-    return <div>Product Not Found</div>
-  }
-  console.log(query)
-  console.log(product)
+  // const product = data.products.find((x) => x.slug === slug);
+  // if (!product) {
+  //   return <div>Product Not Found</div>
+  // }
+  // console.log(query)
+  // console.log(product)
 
+  // const { state, dispatch } = useContext(Store);
+  // if (!product) {
+  //   return <Layout title="Produt Not Found">Produt Not Found</Layout>;
+  // }
+
+  // const addToCartHandler = () => {
+
+  //   const existItem = state.cart.cartItems.find((x) => x.slug === product.slug);
+  //   const quantity = existItem ? existItem.quantity + 1 : 1;
+
+  //   if (data.countInStock < quantity) {
+  //     return toast.error('Sorry. Product is out of stock');
+  //   }
+    
+  //   dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity} });
+  // }
+  
+  // Connct to mongoDB
+  const { product } = props;
   const { state, dispatch } = useContext(Store);
+  const router = useRouter();
   if (!product) {
     return <Layout title="Produt Not Found">Produt Not Found</Layout>;
   }
 
-  const addToCartHandler = () => {
-
+  const addToCartHandler = async () => {
     const existItem = state.cart.cartItems.find((x) => x.slug === product.slug);
     const quantity = existItem ? existItem.quantity + 1 : 1;
-
+    const { data } = await axios.get(`/api/products/${product._id}`);
+    // data
     if (data.countInStock < quantity) {
       return toast.error('Sorry. Product is out of stock');
     }
-    
-    dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity} });
-  }
+
+    dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity } });
+    router.push('/cart');
+  };
 
   return (
     <Layout title={product.name}>
@@ -96,4 +121,18 @@ export default function ProductScreen() {
       </div>
     </Layout>
   )
+}
+
+export async function getServerSideProps(context) {
+  const { params } = context;
+  const { slug } = params;
+
+  await db.connect();
+  const product = await Product.findOne({ slug }).lean();
+  await db.disconnect();
+  return {
+    props: {
+      product: product ? db.convertDocToObj(product) : null,
+    },
+  };
 }

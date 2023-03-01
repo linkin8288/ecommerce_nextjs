@@ -21,13 +21,15 @@ export default function ProductItem({ product, addToCartHandler }) {
         </Link>
         <p className="mb-2">{product.brand}</p>
         <p>${product.price}</p>
-        {/* <button
+        
+        {/* connect to mongoDB */}
+        <button
           className="primary-button"
           type="button"
           onClick={() => addToCartHandler(product)}
         >
           Add to cart
-        </button> */}
+        </button>
       </div>
     </div>
   );
