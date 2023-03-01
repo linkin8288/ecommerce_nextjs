@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link';
 
-export default function ProductItem({ product }) {
+export default function ProductItem({ product, addToCartHandler }) {
   return (
     <div className="card">
       <Link href={`/product/${product.slug}`} legacyBehavior>
@@ -21,36 +21,14 @@ export default function ProductItem({ product }) {
         </Link>
         <p className="mb-2">{product.brand}</p>
         <p>${product.price}</p>
-        <button
+        {/* <button
           className="primary-button"
           type="button"
-          // onClick={() => addToCartHandler(product)}
+          onClick={() => addToCartHandler(product)}
         >
           Add to cart
-        </button>
+        </button> */}
       </div>
     </div>
   );
-}
-
-function reducer (state, action) {
-  switch (action.type) {
-    case 'CART_ADD_ITEM': {
-      
-      const newItem = action.payload;
-      
-      const existItem = state.cart.cartItems.find(
-        (item) => item.slug === newItem.slug
-      );
-      
-      const cartItems = existItem
-        ? state.cart.cartItems.map((item) =>
-            item.name === existItem.name ? newItem : item
-          )
-      
-        : [...state.cart.cartItems, newItem];
-      
-      return { ...state, cart: { ...state.cart, cartItems } };
-    }
-  }
-}  
+};
